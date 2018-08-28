@@ -888,7 +888,7 @@ namespace xharness
 		{
 			try {
 				Directory.CreateDirectory (LogDirectory);
-				Log log = Logs.Create ("Harness.log", "Harness log");
+				Log log = Logs.Create ("Harness.log", "Harness log", overwrite: true);
 				if (Harness.InWrench)
 					log = Log.CreateAggregatedLog (log, new ConsoleLog ());
 				Harness.HarnessLog = MainLog = log;

@@ -145,6 +145,7 @@ namespace xharness
 						fs.Dispose ();
 					} else {
 						writer = fs;
+						writer.Flush ();
 					}
 				}
 			} catch (Exception e) {
@@ -195,15 +196,18 @@ namespace xharness
 		}
 
 		// Create a new log backed with a file
-		public LogFile Create (string filename, string name)
+		public LogFile Create (string filename, string name, bool overwrite = false)
 		{
-			return Create (Directory, filename, name);
+			return Create (Directory, filename, name, overwrite);
 		}
 
-		LogFile Create (string directory, string filename, string name)
+		LogFile Create (string directory, string filename, string name, bool overwrite = false)
 		{
 			System.IO.Directory.CreateDirectory (directory);
-			var rv = new LogFile (this, name, Path.GetFullPath (Path.Combine (directory, filename)));
+			var fn = Path.GetFullPath (Path.Combine (directory, filename));
+			if (overwrite && File.Exists (fn))
+				File.Delete (fn);
+			var rv = new LogFile (this, name, fn);
 			Add (rv);
 			return rv;
 		}
